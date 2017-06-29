@@ -22,7 +22,6 @@ dist/
 # IDE generated
 #---------------------------------
 .idea
-.idea/
 .project
 *.iml
 .vscode/
