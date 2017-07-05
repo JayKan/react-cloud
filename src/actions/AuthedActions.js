@@ -128,6 +128,15 @@ function receiveNewStreamSongs(futureUrl, entities, songs) {
   }
 }
 
+// action creator
+function receiveAuthedFollowings(users, entities) {
+  return {
+    type: types.RECEIVE_AUTHED_FOLLOWINGS,
+    entities,
+    users,
+  };
+}
+
 function fetchNewStreamSongs(url, accessToken) {
   return (dispatch, getState) => {
     const { authed, playlists } = getState();
@@ -211,7 +220,20 @@ function fetchStream(accessToken) {
 }
 
 function fetchFollowings(accessToken) {
+  return dispatch => {
+    fetch(`//api.soundcloud.com/me/followings?oauth_token=${accessToken}`)
+      .then(response => response.json())
+      .then(json => normalize(json.collection, arrayOf(userSchema)))
+      .then(normalized => {
+        const users = normalized.result.reduce((obj, userId) => {
+          return Object.assign({}, obj, { [userId]: 1 });
+        }, {});
 
+        // dispatch `receiveAuthedFollowings` actions with users and entities
+        dispatch(receiveAuthedFollowings(users, normalized.entities));
+      })
+      .catch(err => { throw err; });
+  };
 }
 
 function receiveAuthedUserPre(accessToken, user, shouldShowStream) {
@@ -228,34 +250,149 @@ function receiveAuthedUserPre(accessToken, user, shouldShowStream) {
   };
 }
 
-
-
-export function initAuth() {
-
+// action creator `resetAuthed`
+function resetAuthed(playlists) {
+  return {
+    type: types.RESET_AUTHED,
+    playlists,
+  };
 }
 
-export function loginUser(shouldShowStream = true) {
+// action creator `unshiftNewStreamSongs`
+function unshiftNewStreamSongs(songs) {
+  return {
+    type: types.UNSHIFT_NEW_STREAM_SONGS,
+    songs,
+  };
+}
+
+// action creator `setFollowing`
+function setFollowing(userId, following) {
+  return {
+    type: types.SET_FOLLOWING,
+    userId,
+    following,
+  };
+}
+
+// action creator `setLike`
+function setLike(songId, liked) {
+  return {
+    type: types.SET_LIKE,
+    songId,
+    liked,
+  };
+}
+
+// action creator `appendLike`
+function appendLike(songId) {
+  return {
+    type: types.APPEND_LIKE,
+    songId,
+  };
+}
+
+// action creator `changePlayingSong`
+function changePlayingSong(songIndex) {
+  return {
+    type: types.CHANGE_PLAYING_SONG,
+    songIndex,
+  };
+}
+
+
+function syncFollowing(accessToken, userId, following) {
+  fetch(
+    `//api.soundcloud.com/me/followings/${userId}?oauth_token=${accessToken}`,
+    { method: following ? 'put' : 'delete' }
+  );
+}
+
+function syncLike(accessToken, songId, liked) {
+  fetch(
+    `//api.soundcloud.com/me/favorites/${songId}?oauth_token=${accessToken}`,
+    { method: liked ? 'put' : 'delete' }
+  );
+}
+
+export function initAuth() {
   return dispatch => {
     const accessToken = Cookies.get(COOKIE_PATH);
     if (accessToken) {
       return dispatch(authUser(accessToken, false));
     }
     return null;
-  }
+  };
+}
+
+export function loginUser(shouldShowStream = true) {
+  return dispatch => {
+    SC.initialize({
+      client_id: CLIENT_ID,
+      redirect_uri: `${window.location.protocol}//${window.location.host}/api/callback`,
+    });
+
+    SC.connect().then(authObj => {
+      Cookies.set(COOKIE_PATH, authObj.oauth_token);
+      dispatch(authUser(authObj.oauth_token, shouldShowStream));
+    }).cathc(err => { throw err; });
+  };
 }
 
 export function logoutUser() {
+  return (dispatch, getState) => {
+    Cookies.remove(COOKIE_PATH);
+    const { authed, entities, navigator } = getState();
+    const { path } = navigator.route;
+    const playlists = authed.playlists.map(playlistId => {
+      return entities.playlists[playlistId].title + AUTHED_PLAYLIST_SUFFIX;
+    });
 
+    clearInterval(streamInterval);
+
+    if (path[0] === 'me') {
+      dispatch(navigateTo({ path: ['songs'] }));
+    }
+
+    return dispatch(resetAuthed(playlists));
+  };
 }
 
 export function addNewStreamSongsToPlaylist() {
-
+  return (dispatch, getState) => {
+    const { authed } = getState();
+    dispatch(unshiftNewStreamSongs(authed.newStreamSongs.slice()));
+  };
 }
 
 export function toggleFollow(userId) {
+ return (dispatch, getState) => {
+   const { authed } = getState();
+   const { followings } = authed;
+   const following = userId in followings && followings[userId] === 1 ? 0 : 1;
 
+   dispatch(setFollowing(userId, following));
+   syncFollowing(authed.accessToken, userId, following);
+ };
 }
 
 export function toggleLike(songId) {
+  return (dispatch, getState) => {
+    const { authed, player } = getState();
+    const { likes } = authed;
+    const { selectedPlaylists, currentSongIndex } = player;
+    const liked = songId in likes && likes[songId] === 1 ? 0 : 1;
 
+    if (!(songId in likes)) {
+      dispatch(appendLike(songId));
+
+      if (currentSongIndex !== null
+      && selectedPlaylists[selectedPlaylists.length - 1] === `likes${AUTHED_PLAYLIST_SUFFIX}`) {
+        dispatch(changePlayingSong(currentSongIndex + 1));
+      }
+    }
+
+    dispatch(setLike(songId, liked));
+    syncLike(authed.accessToken, songId, liked);
+  };
 }
