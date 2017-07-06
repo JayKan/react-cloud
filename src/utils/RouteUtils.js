@@ -16,17 +16,38 @@ export function constructUrl(route) {
   return result;
 }
 
+// export function parseUrl(windowHash) {
+//   const query = {};
+//   const hashArr = windowHash.replace('#/', '').split('?');
+//   let path = hashArr[0].split('/');
+//
+//   if (hashArr.length > 1) {
+//     hashArr[1].split('&').forEach(str => {
+//       const arr = str.splice('=');
+//       const key = arr[0];
+//       const value = arr[1];
+//
+//       if (isNaN(value)) {
+//         query[key] = value;
+//       } else {
+//         query[key] = Number(value);
+//       }
+//     });
+//   }
+//
+//   return { path, query };
+// }
 export function parseUrl(windowHash) {
+  let path = [];
   const query = {};
-  const hashArr = windowHash.replace('#/', '').splice('?');
-  let path = hashArr[0].split('/');
+  const hashArr = windowHash.replace('#/', '').split('?');
+  path = hashArr[0].split('/');
 
   if (hashArr.length > 1) {
     hashArr[1].split('&').forEach(str => {
-      const arr = str.splice('=');
+      const arr = str.split('=');
       const key = arr[0];
       const value = arr[1];
-
       if (isNaN(value)) {
         query[key] = value;
       } else {
@@ -39,5 +60,5 @@ export function parseUrl(windowHash) {
 }
 
 export function pushState(route) {
-  history.pushState({ state }, '', `#/${constructUrl(route)}`);
+  history.pushState({ route }, '', `#/${constructUrl(route)}`);
 }
