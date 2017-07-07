@@ -43,7 +43,6 @@ export function constructUserSongsUrl(userId) {
 export function getImageUrl(s, size = null) {
   let str = s;
   if (!str) return '';
-
   str = str.replace('http:', '');
 
   switch (size) {
