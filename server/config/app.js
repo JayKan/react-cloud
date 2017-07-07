@@ -27,7 +27,20 @@ module.exports = app => {
   app.use(helmet.ieNoOpen());
 
   // gzip compression
-  app.use(compression());
+  // app.use(compression());
+  app.get('*.js', (req, res, next) => {
+    req.url = req.url + '.gz';
+    res.set('Content-Encoding', 'gzip');
+    res.set('Content-Type', 'text/javascript');
+    next();
+  });
+
+  app.get('*.css', function(req, res, next) {
+    req.url = req.url + '.gz';
+    res.set('Content-Encoding', 'gzip');
+    res.set('Content-Type', 'text/css');
+    next();
+  });
 
   // development mode only
   if (process.env.NODE_ENV === 'development') {
@@ -38,3 +51,4 @@ module.exports = app => {
   app.use(express.static(paths.static, { index: false }));
   app.use(favicon(paths.favicon));
 };
+

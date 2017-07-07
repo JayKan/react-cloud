@@ -7,6 +7,7 @@ module.exports = (app, production) => {
   const router = new express.Router();
   const htmlFile = paths.indexHtml;
 
+
   if (production) {
     router.all('*', (req, res) => {
       if (req.headers['x-forwarded-proto'] !== 'https') {
@@ -22,5 +23,4 @@ module.exports = (app, production) => {
   }
 
   app.use(router);
-
 };
