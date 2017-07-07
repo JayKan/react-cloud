@@ -15,7 +15,7 @@ export function initNavigator() {
     };
 
     if (window.location.hash !== '') {
-      dispatch(navigateTo(parseUrl(window.location.hahs)));
+      dispatch(navigateTo(parseUrl(window.location.hash)));
     }
   };
 }

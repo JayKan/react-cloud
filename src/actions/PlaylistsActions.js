@@ -73,7 +73,7 @@ export function fetchSongs(url, playlist) {
         const normalized = normalize(songs, arrayOf(songSchema));
         const result = normalized.result.reduce((arr, songId) => {
           if (arr.indexOf(songId) === -1) {
-            arr.push(arr);
+            arr.push(songId);
           }
 
           return arr;
