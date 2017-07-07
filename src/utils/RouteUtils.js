@@ -16,32 +16,11 @@ export function constructUrl(route) {
   return result;
 }
 
-// export function parseUrl(windowHash) {
-//   const query = {};
-//   const hashArr = windowHash.replace('#/', '').split('?');
-//   let path = hashArr[0].split('/');
-//
-//   if (hashArr.length > 1) {
-//     hashArr[1].split('&').forEach(str => {
-//       const arr = str.splice('=');
-//       const key = arr[0];
-//       const value = arr[1];
-//
-//       if (isNaN(value)) {
-//         query[key] = value;
-//       } else {
-//         query[key] = Number(value);
-//       }
-//     });
-//   }
-//
-//   return { path, query };
-// }
 export function parseUrl(windowHash) {
-  let path = [];
+  if (!windowHash) return;
   const query = {};
   const hashArr = windowHash.replace('#/', '').split('?');
-  path = hashArr[0].split('/');
+  let path = hashArr[0].split('/');
 
   if (hashArr.length > 1) {
     hashArr[1].split('&').forEach(str => {
