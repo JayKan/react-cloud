@@ -11,6 +11,8 @@ const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
 const NoEmitOnErrorsPlugin = require('webpack/lib/NoEmitOnErrorsPlugin');
 const ProgressPlugin = require('webpack/lib/ProgressPlugin');
 const UglifyJsPlugin = require('webpack/lib/optimize/UglifyJsPlugin');
+const AggressiveMergingPlugin = require('webpack/lib/optimize/AggressiveMergingPlugin');
+const CompressionPlugin = require('compression-webpack-plugin');
 const WebpackMd5Hash = require('webpack-md5-hash');
 
 //=========================================================
@@ -166,9 +168,9 @@ if (ENV_PRODUCTION) {
 
   config.plugins.push(
     new NoEmitOnErrorsPlugin(),
-    // new OptimizeJsPlugin({
-    //   sourceMap: false
-    // }),
+    new OptimizeJsPlugin({
+      sourceMap: false,
+    }),
     new WebpackMd5Hash(),
     new ExtractTextPlugin('styles.[contenthash].css'),
     new UglifyJsPlugin({
@@ -192,6 +194,14 @@ if (ENV_PRODUCTION) {
         join_vars: true,
         negate_iife: false // we need this for lazy v8
       }
+    }),
+    new AggressiveMergingPlugin(),
+    new CompressionPlugin({
+      asset: '[path].gz[query]',
+      algorithm: 'gzip',
+      test: /\.js$|\.css$|\.html$/,
+      threshold: 10240,
+      minRatio: 0.8
     })
   );
 }
