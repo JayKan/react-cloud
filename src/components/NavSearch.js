@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import { navigateTo } from '../actions/NavigatorActions';
 
@@ -6,7 +7,7 @@ const propTypes = {
   dispatch: PropTypes.func.isRequired
 };
 
-class NavSearch extends Component {
+class NavSearch extends React.Component {
   constructor(props) {
     super(props);
     this.handleOnKeyPress = this.handleOnKeyPress.bind(this);
