@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { IMAGE_SIZES } from '../constants/SongConstants';
 import { formatSeconds } from '../utils/FormatUtils';
 import { getImageUrl } from '../utils/SongUtils';
@@ -8,7 +9,7 @@ const propTypes = {
   i: PropTypes.number.isRequired
 };
 
-class Comment extends Component {
+class Comment extends React.Component {
   render() {
     const { comment, i } = this.props;
     const { user } = comment;
