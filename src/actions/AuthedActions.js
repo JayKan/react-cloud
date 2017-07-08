@@ -64,7 +64,6 @@ function receiveAuthedPlaylists(playlists, entities) {
   };
 }
 
-
 function fetchLikes(accessToken) {
   return dispatch =>
     fetch(`//api.soundcloud.com/me/favorites?oauth_token=${accessToken}`)
@@ -82,7 +81,6 @@ function fetchLikes(accessToken) {
           `likes${AUTHED_PLAYLIST_SUFFIX}`,
           null
         ));
-
       })
       .catch(err => { throw err; });
 }
