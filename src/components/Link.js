@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { navigateTo } from '../actions/NavigatorActions';
 import { constructUrl } from '../utils/RouteUtils';
 
@@ -10,7 +11,7 @@ const propTypes = {
   title: PropTypes.string
 };
 
-class Link extends Component {
+class Link extends React.Component {
   constructor(props) {
     super(props);
     this.handleClick = this.handleClick.bind(this);
