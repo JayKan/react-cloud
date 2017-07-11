@@ -1,6 +1,5 @@
 'use strict';
 
-const compression = require('compression');
 const express = require('express');
 const favicon = require('serve-favicon');
 const helmet = require('helmet');
@@ -26,15 +25,14 @@ module.exports = app => {
   app.use(helmet.xssFilter());
   app.use(helmet.ieNoOpen());
 
-  // gzip compression
-  // app.use(compression());
+  // load gzipped js files
   app.get('*.js', (req, res, next) => {
     req.url = req.url + '.gz';
     res.set('Content-Encoding', 'gzip');
     res.set('Content-Type', 'text/javascript');
     next();
   });
-
+  // load gzipped css files
   app.get('*.css', function(req, res, next) {
     req.url = req.url + '.gz';
     res.set('Content-Encoding', 'gzip');
