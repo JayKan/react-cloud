@@ -1,10 +1,10 @@
 import { CLIENT_ID } from '../constants/Config';
 
-export function constructUserFollowingUrl(userId) {
+export function constructUserFollowingsUrl(userId) {
   return `//api.soundcloud.com/users/${userId}/followings?client_id=${CLIENT_ID}`;
 }
 
-export function constructUserProfileUrl(useId) {
+export function constructUserProfilesUrl(userId) {
   return `//api.soundcloud.com/users/${userId}/web-profiles?client_id=${CLIENT_ID}`;
 }
 
