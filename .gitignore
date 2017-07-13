@@ -32,3 +32,4 @@ dist/
 __MACOSX/
 .DS_Store
 Thumbs.db
+!/src/components/SongListItem.js
