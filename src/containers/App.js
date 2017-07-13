@@ -54,9 +54,6 @@ class App extends React.Component {
 
   render() {
     const { height, isMobile, width } = this.props;
-    // console.log('isMobile: ', isMobile);
-    // console.log('height: ', height);
-    // console.log('width: ', width);
     if (isMobile) {
 
     }
