@@ -10,17 +10,19 @@ import './styles/main.scss';
 import App from './containers/App';
 import configureStore from './store/configureStore';
 
+// root element
+const rootElement = document.getElementById('root');
 // configure store
 const store = configureStore();
 
-function render(element) {
+function render(App) {
   ReactDOM.render(
     <AppContainer>
       <Provider store={ store }>
         <App />
       </Provider>
     </AppContainer>,
-    element
+    rootElement
   );
 }
 
@@ -31,5 +33,4 @@ if (module.hot) {
 }
 
 // render root container
-const rootElement = document.getElementById('root');
-render(rootElement);
+render(App);
