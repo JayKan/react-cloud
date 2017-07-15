@@ -43,4 +43,6 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(MeContainer);
+export default connect(
+  mapStateToProps
+)(MeContainer);
