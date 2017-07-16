@@ -25,7 +25,10 @@ export default function stickify(InnerComponent, scrollHeight) {
     }
 
     render() {
-      return <InnerComponent { ...this.props } sticky={ this.state.sticky } />;
+      return <InnerComponent
+        { ...this.props }
+        sticky={ this.state.sticky }
+      />;
     }
   }
 
