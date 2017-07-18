@@ -63,6 +63,7 @@ class App extends React.Component {
         <NavContainer />
         { this.renderContent() }
 
+        <ModalContainer />
       </div>
     );
   }
