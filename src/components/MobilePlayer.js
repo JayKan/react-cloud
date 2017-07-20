@@ -14,7 +14,7 @@ class MobilePlayer extends React.Component {
       return <div />;
     }
 
-    return <MobilePlayerContent { ...this.props } />
+    return <MobilePlayerContent { ...this.props } />;
   }
 
   render() {
