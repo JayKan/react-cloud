@@ -167,7 +167,7 @@ class SongCards extends React.Component {
 
     return (
       <div className="content">
-        <div className="padder" style={{ height: paddingTop }}/>
+        <div className="padder" style={{ height: paddingTop }} />
         { this.renderSongs(start, end) }
         <div className="padder" style={{ height: paddingBottom }} />
         { isFetching ? <Spinner/> : null }
