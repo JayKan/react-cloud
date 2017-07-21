@@ -18,9 +18,7 @@ class SongsContainer extends React.Component {
       return <MobileSongs { ...this.props } />
     }
 
-    return (
-      <Songs { ...this.props } />
-    );
+    return <Songs { ...this.props } />;
   }
 }
 
