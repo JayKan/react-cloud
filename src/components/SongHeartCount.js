@@ -35,7 +35,7 @@ class SongHeartCount extends React.Component {
 
     if (!authed.user) {
       return (
-        <Popover className={`song-list-item-start song-heart-count ${className}`}>
+        <Popover className={`song-list-item-stat song-heart-count ${className}`}>
           <div>
             <i className="icon ion-heart" />
             <span>{ addCommas(count + (isLiked ? 1 : 0)) }</span>
