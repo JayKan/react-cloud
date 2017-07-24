@@ -1,15 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { playSong } from '../actions/PlayerActions';
-import { fetchSongIfNeeded} from '../actions/SongsActions';
 
-import Comments from './Comments';
-import Link from './Link';
-import SongListItem from './SongListItem';
-import SongHeartCount from './SongHeartCount';
-import Spinner from './Spinner';
-import stickify from './Stickify';
-import Waveform from './Waveform';
+import { playSong } from '../actions/PlayerActions';
+import { fetchSongIfNeeded } from '../actions/SongsActions';
+
+import Comments from '../components/Comments';
+import Link from '../components/Link';
+import SongListItem from '../components/SongListItem';
+import SongHeartCount from '../components/SongHeartCount';
+import Spinner from '../components/Spinner';
+import stickify from '../components/Stickify';
+import Waveform from '../components/Waveform';
 
 import TogglePlayButtonContainer from '../containers/TogglePlayButtonContainer';
 
@@ -59,7 +60,7 @@ class Song extends React.Component {
     const { height, player, playingSongId, songId, songs } = this.props;
     const song = songs[songId];
     if (!song || !song.comments) {
-      return;
+      return null;
     }
 
     return (
@@ -78,13 +79,13 @@ class Song extends React.Component {
     const playlist = song.title + SONG_PLAYLIST_SUFFIX;
     const relatedSongs = playlist in playlists ? playlists[playlist] : {};
     if (!relatedSongs.items) {
-      return;
+      return null;
     }
 
     const items = relatedSongs.items.slice(1).map((relatedSongId, i) => {
       const relatedSong = songs[relatedSongId];
       const user = users[relatedSong.user_id];
-      const playingSongFunc = this.playSong.bind(this, i + 1);
+      const playSongFunc = this.playSong.bind(this, i + 1);
       return (
         <SongListItem
           authed={ authed }
@@ -92,7 +93,7 @@ class Song extends React.Component {
           isActive={ playingSongId === relatedSong.id }
           key={ relatedSong.id }
           player={ player }
-          playSong={ playingSongFunc }
+          playSong={ playSongFunc }
           song={ relatedSong }
           user={ user }
         />
@@ -101,7 +102,7 @@ class Song extends React.Component {
 
     return (
       <div className="tab-content">
-        { items  }
+        { items }
       </div>
     );
   }
@@ -142,8 +143,8 @@ class Song extends React.Component {
               <div className={`song card ${(isActive ? ' active' : '')}`}>
                 <div className="song-main">
                   <div
-                   className="song__image"
-                   style={{ backgroundImage: `url(${image})`}}
+                    className="song__image"
+                    style={{ backgroundImage: `url(${image})` }}
                   >
                     { this.renderTogglePlayButton() }
                   </div>
@@ -155,7 +156,7 @@ class Song extends React.Component {
                       <div className="song-user">
                         <div
                           className="song-user-image"
-                          style={{ backgroundImage: `url(${getImageUrl(user.avatar_url)})`}}
+                          style={{ backgroundImage: `url(${getImageUrl(user.avatar_url)})` }}
                         />
                         <Link
                           className="song-username"
@@ -173,7 +174,7 @@ class Song extends React.Component {
                           songId={ song.id }
                         />
                         <div className="song-stat">
-                          <i className="icon on-play" />
+                          <i className="icon ion-play" />
                           <span>{ addCommas(song.playback_count) }</span>
                         </div>
                         <div className="song-stat">
@@ -198,7 +199,7 @@ class Song extends React.Component {
                   </div>
                 </div>
               </div>
-              { this.renderSongs }
+              { this.renderSongs() }
             </div>
             <div className="col-3-10">
               <div className={`sidebar ${(sticky ? ' sticky' : '')}`}>
