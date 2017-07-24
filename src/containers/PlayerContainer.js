@@ -39,6 +39,7 @@ function mapStateToProps(state) {
     playingSongId,
     songs,
     users,
+    playlists,
   };
 }
 
