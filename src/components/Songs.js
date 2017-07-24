@@ -64,7 +64,7 @@ class Songs extends React.Component {
             authed={ authed }
             dispatch={ dispatch }
             height={ height }
-            playSongId={ playingSongId }
+            playingSongId={ playingSongId }
             playlist={ playlist }
             playlists={ playlists }
             scrollFunc={ fetchSongsIfNeeded.bind(null, playlist) }
