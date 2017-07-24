@@ -27,7 +27,7 @@ export function changePlayingSong(songIndex) {
 
 // action creator `changeSelectedPlaylists`
 export function changeSelectedPlaylists(playlists, playlist) {
-  const index = playlists.indexof(playlist);
+  const index = playlists.indexOf(playlist);
   if (index > -1) {
     playlists.splice(index, 1);
   }
