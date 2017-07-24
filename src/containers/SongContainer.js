@@ -1,17 +1,32 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-
-
-const propTypes = {
-
-};
+import { connect } from 'react-redux';
+import Song from '../components/Song';
+import { getPlayingSongId } from '../utils/PlayerUtils';
 
 class SongContainer extends React.Component {
   render() {
-
+    return <Song { ...this.props } />;
   }
 }
 
-SongContainer.propTypes = propTypes;
+function mapStateToProps(state) {
+  const { authed, entities, environment, navigator, player, playlists } = state;
+  const { songs, users } = entities;
+  const { height } = environment;
+  const { path } = navigator.route;
+  const songId = Number(path[1]);
+  const playingSongId = getPlayingSongId(player, playlists);
 
-export default SongContainer;
+  return {
+    authed,
+    height,
+    player,
+    playingSongId,
+    playlists,
+    songId,
+    songs,
+    users,
+  };
+}
+
+export default connect(mapStateToProps)(SongContainer);
