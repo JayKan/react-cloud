@@ -62,17 +62,11 @@ const initialState = {
 export default function playlists(state = initialState, action) {
   switch (action.type) {
     case types.REQUEST_SONGS:
-      // console.groupCollapsed('Request Songs <action>');
-      // console.log(JSON.stringify(action, null, 4));
-      // console.groupEnd();
       return Object.assign({}, state, {
         [action.playlist]: playlist(state[action.playlist], action),
       });
 
     case types.RECEIVE_SONGS:
-      // console.groupCollapsed('Receive Songs <action>');
-      // console.log(JSON.stringify(action, null, 4));
-      // console.groupEnd();
       return Object.assign({}, state, {
         [action.playlist]: playlist(state[action.playlist], action),
       });
