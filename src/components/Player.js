@@ -85,7 +85,7 @@ class Player extends React.Component {
   }
 
   componentWillUnmount() {
-    document.addEventListener('keydown', this.handleKeyDown, false);
+    document.removeEventListener('keydown', this.handleKeyDown, false);
 
     const audioElement = ReactDOM.findDOMNode(this.refs.audio);
     audioElement.removeEventListener('ended', this.handleEnded, false);
@@ -188,7 +188,7 @@ class Player extends React.Component {
     this.setState({
       isSeeking: false,
     }, () => {
-      ReactDOM.findDOMNode(this.refs.audio).currentTime  = currentTime;
+      ReactDOM.findDOMNode(this.refs.audio).currentTime = currentTime;
     });
   }
 
@@ -205,7 +205,7 @@ class Player extends React.Component {
       return;
     }
 
-    dispatch(changeCurrentTime(currentTime))
+    dispatch(changeCurrentTime(currentTime));
   }
 
   handleVolumeChange(e) {
@@ -268,6 +268,7 @@ class Player extends React.Component {
       e.preventDefault();
       this.changeSong(CHANGE_TYPES.PREV);
     } else if (keyCode === 39 || keyCode === 75) {
+      e.preventDefault();
       this.changeSong(CHANGE_TYPES.NEXT);
     }
   }
@@ -320,15 +321,15 @@ class Player extends React.Component {
       return (
         <div
           className="player-seek-duration-bar"
-          style={{ width: `${width}` }}
+          style={{ width: `${width}%` }}
         >
           <div
             className="player-seek-handle"
-            onClick={ this.handleMouseClick }
-            onMouseDown={ this.handleSeekMouseDown }
+            onClick={this.handleMouseClick}
+            onMouseDown={this.handleSeekMouseDown}
           />
         </div>
-      )
+      );
     }
 
     return null;
@@ -338,10 +339,10 @@ class Player extends React.Component {
     const { dispatch, player, playlists, songs } = this.props;
     return (
       <Playlist
-        dispatch={ dispatch }
-        player={ player }
-        playlists={ playlists }
-        songs={ songs }
+        dispatch={dispatch}
+        player={player}
+        playlists={playlists}
+        songs={songs}
       />
     );
   }
@@ -356,11 +357,11 @@ class Player extends React.Component {
       >
         <div
           className="player-seek-handle"
-          onClick={ this.handleMouseClick }
-          onMouseDown={ this.handleVolumeMouseDown }
+          onClick={this.handleMouseClick}
+          onMouseDown={this.handleVolumeMouseDown}
         />
       </div>
-    )
+    );
   }
 
   renderVolumeIcon() {
@@ -395,7 +396,7 @@ class Player extends React.Component {
     const song = songs[playingSongId];
     const user = users[song.user_id];
     const { duration } = this.state;
-    const prevFunc = this.changeSong.bind(this. CHANGE_TYPES.PREV);
+    const prevFunc = this.changeSong.bind(this, CHANGE_TYPES.PREV);
     const nextFunc = this.changeSong.bind(this, this.state.shuffle ? CHANGE_TYPES.SHUFFLE : CHANGE_TYPES.NEXT);
 
     return (
@@ -403,7 +404,7 @@ class Player extends React.Component {
         <audio id="audio" ref="audio" src={ formatStreamUrl(song.stream_url) } />
         <div className="container">
           <div className="player-main">
-            <div className="play-section player-info">
+            <div className="player-section player-info">
               <img
                 alt="song artwork"
                 className="player-image"
@@ -468,7 +469,7 @@ class Player extends React.Component {
               </Popover>
               <div
                 className="player-button player-volume-button"
-                onClick={this.toggleMute }
+                onClick={ this.toggleMute }
               >
                 { this.renderVolumeIcon() }
               </div>
