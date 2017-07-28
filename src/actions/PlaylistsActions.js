@@ -107,10 +107,10 @@ export function receiveSongs(entities, songs, playlist, nextUrl, futureUrl) {
   return {
     type: types.RECEIVE_SONGS,
     entities,
+    songs,
     futureUrl,
     nextUrl,
     playlist,
-    songs,
   };
 }
 
