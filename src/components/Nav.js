@@ -143,7 +143,6 @@ class Nav extends React.Component {
           { hasNewStreamSongs ? <div className="nav-nav-user-link-indicator" /> : null }
           <span className="nav-nav-user-link-text">stream</span>
         </Link>
-
       </div>
     );
   }
