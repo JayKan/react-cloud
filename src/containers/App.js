@@ -39,6 +39,9 @@ class App extends React.Component {
           case 1:
             return <SongsContainer />;
           case 2 :
+            console.log(
+              'Song Container'
+            );
             return <SongContainer />;
           default:
             return null;
@@ -55,14 +58,20 @@ class App extends React.Component {
   render() {
     const { height, isMobile, width } = this.props;
     if (isMobile) {
-
+      return (
+        <div className="mobile" style={{ height: `${height}px`, width: `${width}px` }}>
+          <PlayerContainer />
+          { this.renderContent() }
+          <NavContainer />
+        </div>
+      );
     }
 
     return (
       <div>
         <NavContainer />
         { this.renderContent() }
-
+        <PlayerContainer />
         <ModalContainer />
       </div>
     );
