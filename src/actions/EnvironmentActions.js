@@ -1,19 +1,15 @@
 import * as types from '../constants/ActionTypes';
 
-function changeIsMobile(isMobile) {
-  return {
-    type: types.CHANGE_IS_MOBILE,
-    isMobile,
-  };
-}
+const changeIsMobile = isMobile => ({
+  type: types.CHANGE_IS_MOBILE,
+  isMobile
+});
 
-export function changeWidthAndHeight(height, width) {
-  return {
-    type: types.CHANGE_WIDTH_AND_HEIGHT,
-    height,
-    width,
-  };
-}
+export const changeWidthAndHeight = (height, width) => ({
+  type: types.CHANGE_WIDTH_AND_HEIGHT,
+  height,
+  width
+})
 
 export function initEnvironment() {
   return dispatch => {

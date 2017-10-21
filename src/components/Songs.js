@@ -18,9 +18,7 @@ const propTypes = {
   users: PropTypes.object.isRequired,
 };
 
-class Songs extends React.Component {
-  // method called right before render()
-  // and after this.state and this.props have been initialized
+class Songs extends React.Component {  
   componentWillMount() {
     const { dispatch, playlist, playlists } = this.props;
     if (!(playlist in playlists) || playlists[playlist].items.length === 0) {

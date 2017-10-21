@@ -10,6 +10,36 @@ import { playlistSchema, songSchema, userSchema } from '../constants/Schemas';
 const COOKIE_PATH = 'accessToken';
 let streamInterval;
 
+const receiveAccessToken = accessToken => ({
+  type: types.RECEIVE_ACCESS_TOKEN,
+  accessToken
+});
+
+const receiveAuthedUser = user => ({  
+  type: types.RECEIVE_AUTHED_USER,
+  user
+});
+
+const receiveLikes = likes => ({  
+  type: types.RECEIVE_LIKES,
+  likes
+});
+
+const receiveSongs = (entities, songs, playlist, nextUrl, futureUrl) => ({  
+  type: types.RECEIVE_SONGS,
+  entities,
+  songs,
+  playlist,
+  nextUrl,
+  futureUrl  
+});
+
+const receiveAuthedPlaylists = (playlists, entities) => ({  
+  type: types.RECEIVE_AUTHED_PLAYLISTS,
+  playlists,
+  entities  
+});
+
 function authUser(accessToken, shouldShowStream = true) {
   return dispatch =>
     dispatch(fetchAuthedUser(accessToken, shouldShowStream));
@@ -20,49 +50,9 @@ function fetchAuthedUser(accessToken, shouldShowStream) {
     fetch(`//api.soundcloud.com/me?oauth_token=${ accessToken }`)
       .then(response => response.json())
       .then(json => dispatch(receiveAuthedUserPre(accessToken, json, shouldShowStream)))
-      .catch(error => { throw error; })
+      .catch(error => { throw error; });
 }
 
-// action creator
-function receiveAccessToken(accessToken) {
-  return {
-    type: types.RECEIVE_ACCESS_TOKEN,
-    accessToken
-  };
-}
-// action creator
-function receiveAuthedUser(user) {
-  return {
-    type: types.RECEIVE_AUTHED_USER,
-    user,
-  };
-}
-// action creator
-function receiveLikes(likes) {
-  return {
-    type: types.RECEIVE_LIKES,
-    likes,
-  };
-}
-// action creator
-function receiveSongs(entities, songs, playlist, nextUrl, futureUrl) {
-  return {
-    type: types.RECEIVE_SONGS,
-    entities,
-    songs,
-    playlist,
-    nextUrl,
-    futureUrl,
-  };
-}
-// action creator
-function receiveAuthedPlaylists(playlists, entities) {
-  return {
-    type: types.RECEIVE_AUTHED_PLAYLISTS,
-    playlists,
-    entities,
-  };
-}
 
 function fetchLikes(accessToken) {
   return dispatch =>
@@ -70,10 +60,9 @@ function fetchLikes(accessToken) {
       .then(response => response.json())
       .then(json => {
         const songs = json.filter(song => song.streamable);
-        const normalized = normalize(songs, arrayof(songSchema));
+        const normalized = normalize(songs, arrayOf(songSchema));
         const likes = normalized.result.reduce((obj, songId) => Object.assign({}, obj, { [songId]: 1 }), {});
-
-        // dispatch receive likes, songs
+      
         dispatch(receiveLikes(likes));
         dispatch(receiveSongs(
           normalized.entities,
@@ -108,7 +97,6 @@ function fetchPlaylists(accessToken) {
       .catch(err => { throw err; });
 }
 
-// action creator
 function requestSongs(playlist) {
   return {
     type: types.REQUEST_SONGS,
@@ -116,7 +104,6 @@ function requestSongs(playlist) {
   };
 }
 
-// action creator
 function receiveNewStreamSongs(futureUrl, entities, songs) {
   return {
     type: types.RECEIVE_NEW_STREAM_SONGS,
@@ -126,7 +113,6 @@ function receiveNewStreamSongs(futureUrl, entities, songs) {
   }
 }
 
-// action creator
 function receiveAuthedFollowings(users, entities) {
   return {
     type: types.RECEIVE_AUTHED_FOLLOWINGS,
@@ -165,7 +151,7 @@ function initInterval(accessToken) {
       const streamPlaylist = playlists[playlistKey];
 
       if (streamPlaylist.futureUrl) {
-        dipatch(fetchNewStreamSongs(streamPlaylist.futureUrl, accessToken));
+        dispatch(fetchNewStreamSongs(streamPlaylist.futureUrl, accessToken));
       } else {
         clearInterval(streamInterval);
       }
@@ -177,7 +163,6 @@ function fetchSongs(url, playlist) {
   return (dispatch, getState) => {
     const { authed } = getState();
 
-    // dispatch requestSongs
     dispatch(requestSongs(playlist));
 
     return fetch(url)
@@ -199,9 +184,7 @@ function fetchSongs(url, playlist) {
           .map(song => song.origin || song)
           .filter(song => {
             // if (playlist in GEN)
-          })
-
-
+          });
       })
       .catch(err => { throw err; });
   };
@@ -226,8 +209,7 @@ function fetchFollowings(accessToken) {
         const users = normalized.result.reduce((obj, userId) => {
           return Object.assign({}, obj, { [userId]: 1 });
         }, {});
-
-        // dispatch `receiveAuthedFollowings` actions with users and entities
+        
         dispatch(receiveAuthedFollowings(users, normalized.entities));
       })
       .catch(err => { throw err; });
@@ -248,7 +230,6 @@ function receiveAuthedUserPre(accessToken, user, shouldShowStream) {
   };
 }
 
-// action creator `resetAuthed`
 function resetAuthed(playlists) {
   return {
     type: types.RESET_AUTHED,
@@ -256,7 +237,6 @@ function resetAuthed(playlists) {
   };
 }
 
-// action creator `unshiftNewStreamSongs`
 function unshiftNewStreamSongs(songs) {
   return {
     type: types.UNSHIFT_NEW_STREAM_SONGS,
@@ -264,7 +244,6 @@ function unshiftNewStreamSongs(songs) {
   };
 }
 
-// action creator `setFollowing`
 function setFollowing(userId, following) {
   return {
     type: types.SET_FOLLOWING,
@@ -273,7 +252,6 @@ function setFollowing(userId, following) {
   };
 }
 
-// action creator `setLike`
 function setLike(songId, liked) {
   return {
     type: types.SET_LIKE,
@@ -282,7 +260,6 @@ function setLike(songId, liked) {
   };
 }
 
-// action creator `appendLike`
 function appendLike(songId) {
   return {
     type: types.APPEND_LIKE,
@@ -290,14 +267,12 @@ function appendLike(songId) {
   };
 }
 
-// action creator `changePlayingSong`
 function changePlayingSong(songIndex) {
   return {
     type: types.CHANGE_PLAYING_SONG,
     songIndex,
   };
 }
-
 
 function syncFollowing(accessToken, userId, following) {
   fetch(
@@ -333,7 +308,7 @@ export function loginUser(shouldShowStream = true) {
     SC.connect().then(authObj => {
       Cookies.set(COOKIE_PATH, authObj.oauth_token);
       dispatch(authUser(authObj.oauth_token, shouldShowStream));
-    }).cathc(err => { throw err; });
+    }).catch(err => { throw err; });
   };
 }
 

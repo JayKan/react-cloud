@@ -7,6 +7,16 @@ import { GENRES_MAP } from '../constants/SongConstants';
 import { getPlayingPlaylist } from '../utils/PlayerUtils';
 import { constructUrl } from '../utils/SongUtils';
 
+const removeUnlikedSongs = songs => ({  
+  type: types.REMOVE_UNLIKED_SONGS,
+  songs  
+});
+
+const requestSongs = playlist => ({  
+  type: types.REQUEST_SONGS,
+  playlist  
+});
+
 function getNextUrl(playlists, playlist) {
   const activePlaylist = playlists[playlist];
   if (!activePlaylist || activePlaylist.nextUrl === false) {
@@ -14,20 +24,6 @@ function getNextUrl(playlists, playlist) {
   }
 
   return activePlaylist.nextUrl;
-}
-
-function removeUnlikedSongs(songs) {
-  return {
-    type: types.REMOVE_UNLIKED_SONGS,
-    songs,
-  };
-}
-
-function requestSongs(playlist) {
-  return {
-    type: types.REQUEST_SONGS,
-    playlist,
-  };
 }
 
 function shouldFetchSongs(playlists, playlist) {

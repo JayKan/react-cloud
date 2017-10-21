@@ -164,7 +164,7 @@ class SongCards extends React.Component {
     const { playlist, playlists } = this.props;
     const { end, paddingBottom, paddingTop, start } = this.state;
     const isFetching = playlist in playlists ? playlists[playlist].isFetching : false;
-    console.log('playlists: ', playlists);
+    
     return (
       <div className="content">
         <div className="padder" style={{ height: paddingTop }} />

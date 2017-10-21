@@ -2,7 +2,7 @@ import * as types from '../constants/ActionTypes';
 
 const initialRoute = {
   path: ['songs'],
-  query: { q: 'house' }
+  query: { q: 'chill' }
 };
 const initialState = {
   route: initialRoute

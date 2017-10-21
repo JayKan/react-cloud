@@ -38,10 +38,7 @@ class App extends React.Component {
         switch (path.length) {
           case 1:
             return <SongsContainer />;
-          case 2 :
-            console.log(
-              'Song Container'
-            );
+          case 2 :           
             return <SongContainer />;
           default:
             return null;

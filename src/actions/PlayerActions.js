@@ -1,31 +1,21 @@
 import * as types from '../constants/ActionTypes';
 import { CHANGE_TYPES } from '../constants/SongConstants';
 
-// action creator `toggleIsPlaying`
-export function toggleIsPlaying(isPlaying) {
-  return {
-    type: types.TOGGLE_IS_PLAYING,
-    isPlaying,
-  };
-}
+export const toggleIsPlaying = isPlaying => ({  
+  type: types.TOGGLE_IS_PLAYING,
+  isPlaying
+});
 
-// action creator `changeCurrentTime`
-export function changeCurrentTime(time) {
-  return {
-    type: types.CHANGE_CURRENT_TIME,
-    time,
-  };
-}
+export const changeCurrentTime = time => ({  
+  type: types.CHANGE_CURRENT_TIME,
+  time
+});
 
-// action creator `changePlayingSong`
-export function changePlayingSong(songIndex) {
-  return {
-    type: types.CHANGE_PLAYING_SONG,
-    songIndex,
-  };
-}
+export const changePlayingSong = songIndex => ({  
+  type: types.CHANGE_PLAYING_SONG,
+  songIndex
+});
 
-// action creator `changeSelectedPlaylists`
 export function changeSelectedPlaylists(playlists, playlist) {
   const index = playlists.indexOf(playlist);
   if (index > -1) {
@@ -55,7 +45,7 @@ export function changeSong(changeType) {
     }
 
     return dispatch(changePlayingSong(newSongIndex));
-  }
+  };
 }
 
 export function playSong(playlist, songIndex) {

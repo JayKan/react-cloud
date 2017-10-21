@@ -9,6 +9,16 @@ import {
   constructUserSongsUrl,
 } from '../utils/SongUtils';
 
+const requestSong = songId => ({  
+  type: types.REQUEST_SONG,
+  songId  
+});
+
+export const receiveSong = entities => ({  
+  type: types.RECEIVE_SONG,
+  entities  
+});
+
 function fetchRelatedSongs(userId, songTitle) {
   return dispatch => {
     return fetch(constructUserSongsUrl(userId))
@@ -80,20 +90,6 @@ function receiveSongPre(songId, entities) {
     dispatch(receiveSong(entities));
     dispatch(receiveSongs(entities, [songId], songTitle + SONG_PLAYLIST_SUFFIX, null));
     dispatch(fetchSongData(songId, userId, songTitle));
-  };
-}
-
-function requestSong(songId) {
-  return {
-    type: types.REQUEST_SONG,
-    songId,
-  };
-}
-
-export function receiveSong(entities) {
-  return {
-    type: types.RECEIVE_SONG,
-    entities,
   };
 }
 

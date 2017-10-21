@@ -32,7 +32,7 @@ function mapStateToProps(state) {
   const playingSongId = getPlayingSongId(player, playlists);
 
   const time = query && query.t ? query.t : null;
-  let playlist = query && query.q ? query.q : 'house';
+  let playlist = query && query.q ? query.q : 'chill';
   if (time) {
     playlist = `${playlist} - ${time}`;
   }

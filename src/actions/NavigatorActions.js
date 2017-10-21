@@ -1,12 +1,10 @@
 import * as types from '../constants/ActionTypes';
 import { constructUrl, parseUrl, pushState } from '../utils/RouteUtils';
 
-export function changePath(route) {
-  return {
-    type: types.CHANGE_PATH,
-    route
-  };
-}
+export const changePath = route => ({
+  type: types.CHANGE_PATH,
+  route
+});
 
 export function initNavigator() {
   return dispatch => {

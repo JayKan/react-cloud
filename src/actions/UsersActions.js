@@ -11,6 +11,26 @@ import {
   constructUserProfilesUrl,
 } from '../utils/UserUtils';
 
+export const receiveUserFollowings = entities => ({  
+  type: types.RECEIVE_USER_FOLLOWINGS,
+  entities
+});
+
+export const receiveUser = entities => ({  
+  type: types.RECEIVE_USER,
+  entities  
+});
+
+export const receiveUserProfiles = entities => ({  
+  type: types.RECEIVE_USER_PROFILES,
+  entities  
+});
+
+export const requestUser = userId => ({  
+  type: types.REQUEST_USER,
+  userId
+})
+
 function fetchUserData(userId, username) {
   return dispatch => {
     dispatch(fetchUserTracks(userId, username));
@@ -87,34 +107,6 @@ function receiveUserPre(userId, entities) {
     dispatch(receiveUser(entities));
     dispatch(fetchUserData(userId, entities.users[userId].username));
   }
-}
-
-export function receiveUserFollowings(entities) {
-  return {
-    type: types.RECEIVE_USER_FOLLOWINGS,
-    entities,
-  };
-}
-
-export function receiveUser(entities) {
-  return {
-    type: types.RECEIVE_USER,
-    entities,
-  };
-}
-
-export function receiveUserProfiles(entities) {
-  return {
-    type: types.RECEIVE_USER_PROFILES,
-    entities,
-  };
-}
-
-export function requestUser(userId) {
-  return {
-    type: types.REQUEST_USER,
-    userId,
-  };
 }
 
 export function fetchUserIfNeeded(userId) {
