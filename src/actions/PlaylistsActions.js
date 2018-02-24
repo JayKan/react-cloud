@@ -7,14 +7,14 @@ import { GENRES_MAP } from '../constants/SongConstants';
 import { getPlayingPlaylist } from '../utils/PlayerUtils';
 import { constructUrl } from '../utils/SongUtils';
 
-const removeUnlikedSongs = songs => ({  
+const removeUnlikedSongs = songs => ({
   type: types.REMOVE_UNLIKED_SONGS,
-  songs  
+  songs
 });
 
-const requestSongs = playlist => ({  
+const requestSongs = playlist => ({
   type: types.REQUEST_SONGS,
-  playlist  
+  playlist
 });
 
 function getNextUrl(playlists, playlist) {
@@ -41,9 +41,13 @@ export function fetchSongs(url, playlist) {
 
     dispatch(requestSongs(playlist));
 
+    // console.log('------ FETCH SONGS URL ----: ', url);
     return fetch(url)
       .then(response => response.json())
       .then(json => {
+        // console.log('JSON response: ', json);
+        // console.log('\n');
+
         let nextUrl = null;
         let futureUrl = null;
 
@@ -51,6 +55,7 @@ export function fetchSongs(url, playlist) {
           nextUrl = json.next_href;
           nextUrl += (authed.accessToken ? `&oauth_token=${authed.accessToken}` : '');
         }
+        // console.log('JSON.next_href: ', json.next_href);
         if (json.future_href) {
           futureUrl = json.future_href;
           futureUrl += (authed.accessToken ? `&oauth_token=${authed.accessToken}` : '');
@@ -60,6 +65,8 @@ export function fetchSongs(url, playlist) {
           .map(song => song.origin || song)
           .filter(song => {
             if (playlist in GENRES_MAP) {
+              // console.log('### PLAYLIST ###: ', playlist);
+
               return song.streamable && song.kind === 'track' && song.duration < 600000;
             }
 
@@ -75,6 +82,22 @@ export function fetchSongs(url, playlist) {
           return arr;
         }, []);
 
+        // console.log('####### FETCH RECEIVED SONGS ########');
+        // console.log('entities: ', normalized.entities);
+        // console.log('result: ', result);
+        // console.log('playlist: ', playlist);
+        // console.log('nextUrl :', nextUrl);
+        // console.log('futureUrl: ', futureUrl);
+
+        const resultRes = {
+          entities: normalized.entities,
+          songs: result,
+          playlist,
+          futureUrl,
+          nextUrl,
+        };
+
+        // console.log('RECEIVED SONGS RESULT: ', resultRes);
         dispatch(receiveSongs(
           normalized.entities,
           result,
@@ -90,8 +113,10 @@ export function fetchSongs(url, playlist) {
 export function fetchSongsIfNeeded(playlist) {
   return (dispatch, getState) => {
     const { playlists } = getState();
+    // console.log('--- PLAYLIST ----: ', playlist);
     if (shouldFetchSongs(playlists, playlist)) {
       const nextUrl = getNextUrl(playlists, playlist);
+      // console.log('--- NEXT URL ---: ', nextUrl);
       return dispatch(fetchSongs(nextUrl, playlist));
     }
 
