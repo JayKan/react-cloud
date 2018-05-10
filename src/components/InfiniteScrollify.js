@@ -15,16 +15,16 @@ export default function (InnerComponent) {
       }
     }
 
-    componentWillUnmount() {
+    componentDidMount() {
       window.addEventListener('scroll', this.onScroll, false);
+    }
+    
+    componentWillUnmount() {
+      window.removeEventListener('scroll', this.onScroll, false);
     }
 
     render() {
       return <InnerComponent {...this.props } />
-    }
-
-    componentDidMount() {
-      window.addEventListener('scroll', this.onScroll, false);
     }
   }
 
